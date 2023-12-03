@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option csharp_namespace = "ReplicatedLog";
+
+package replicatedlog;
+
+import "google/protobuf/empty.proto";
+
+service ReplicatedLogService {
+  rpc Append(Message) returns (google.protobuf.Empty);
+  rpc List(google.protobuf.Empty) returns (stream Message);
+}
+
+message Message {
+  string text = 1;
+}
