@@ -19,5 +19,7 @@ Docker compose exposes 38080 port for Primary and 38081, 38082 ports for seconda
 More secondaries can be added by adding more secondary services and changing primary environment variables in [docker-compose.yml](./ReplicatedLog/docker-compose.yml) file.
 
 ### Random delays
-Secondaries respond with random delay on Append, from 0 to 2000 ms (configurable in docker-compose).
+Secondaries respond with random delay on Append, from 0 to 20000 ms (configurable in docker-compose).
 ![Logs](screenshots/logs.png)
+
+Despite the delay, total order of messages is the same on all instances, and deduplication of replicated messages is implemented on secondaries.
