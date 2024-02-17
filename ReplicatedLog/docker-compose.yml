@@ -9,6 +9,9 @@ services:
       - ReplicationLog__MaxAppendDelayMs=0
       - ReplicationLog__Secondaries__0=http://secondary1:8080
       - ReplicationLog__Secondaries__1=http://secondary2:8080
+      - ReplicationLog__ReplicationTimeoutMs=30000
+      - ReplicationLog__HeartbeatTimeoutMs=10000
+      - ReplicationLog__HeartbeatIntervalMs=30000
 
   secondary1:
     build: .    

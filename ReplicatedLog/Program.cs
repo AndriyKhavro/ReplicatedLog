@@ -1,4 +1,5 @@
 using ReplicatedLog;
+using ReplicatedLog.Services;
 using ReplicatedLogService = ReplicatedLog.Services.ReplicatedLogService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,10 +18,12 @@ foreach (var secondaryAddress in configuration.Secondaries)
 }
 
 builder.Services.AddGrpcReflection();
+builder.Services.AddSingleton<HeartbeatService>();
 
 var app = builder.Build();
 
 app.MapGrpcService<ReplicatedLogService>();
 app.MapGrpcReflectionService();
 
+var heartbeatTask = app.Services.GetRequiredService<HeartbeatService>().Start();
 app.Run();

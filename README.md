@@ -23,3 +23,24 @@ Secondaries respond with random delay on Append, from 0 to 20000 ms (configurabl
 ![Logs](screenshots/logs.png)
 
 Despite the delay, total order of messages is the same on all instances, and deduplication of replicated messages is implemented on secondaries.
+
+### Retry logic
+If a secondary does not respond in ReplicationTimeoutMs, primary waits for some time and retries.
+
+### Heartbeat
+Primary keeps track of secondaries health. Health endpoint returns status of each secondary. Here are the statuses:
+```
+enum HeartbeatStatus {
+	Unknown = 0;
+	Healthy = 1;
+	Suspected = 2;
+	Unhealthy = 3;
+}
+```
+![Health](screenshots/health.png)
+If Heartbeat Status of a secondary is Unhealthy or Unknown (initial), primary doesn't send requests to it.
+![Heartbeat failed](screenshots/heartbeat.png)
+
+### Quorum
+If there is no quorum, primary doesn't accept Append requests.
+![No Quorum](image.png)

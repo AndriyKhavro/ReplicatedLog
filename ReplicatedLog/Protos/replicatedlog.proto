@@ -7,9 +7,11 @@ package replicatedlog;
 import "google/protobuf/empty.proto";
 
 service ReplicatedLogService {
-  rpc Append(MessageRequest) returns (google.protobuf.Empty);
+  rpc Append(MessageRequest) returns (MessageResponse);
   rpc Replicate(ReplicatedMessage) returns (google.protobuf.Empty);
   rpc List(google.protobuf.Empty) returns (stream Message);
+  rpc Heartbeat(google.protobuf.Empty) returns (HeartbeatResponse);
+  rpc Health(google.protobuf.Empty) returns (HealthResponse);
 }
 
 message Message {
@@ -21,7 +23,27 @@ message MessageRequest {
   int32 writeConcern = 2;
 }
 
+message MessageResponse {
+	bool accepted = 1;
+	string error = 2;
+}
+
 message ReplicatedMessage {
   Message message = 1;
   int32 sequenceNumber = 2;
+}
+
+message HeartbeatResponse {
+	bool isHealthy = 1;
+}
+
+enum HeartbeatStatus {
+	Unknown = 0;
+	Healthy = 1;
+	Suspected = 2;
+	Unhealthy = 3;
+}
+
+message HealthResponse {
+	map<string, HeartbeatStatus> status = 1;
 }
